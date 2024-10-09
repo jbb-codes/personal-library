@@ -1,0 +1,47 @@
+body{
+    margin: 0;
+    /* background-color: lightslategray; */
+}
+
+#grid-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 350px));
+    justify-content: center;
+    gap: 50px;
+    margin: 200px;
+}
+
+#show-add-book-dialog-btn{
+    font-size: 20px;
+    width: 130px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background-color: lightslategray;
+    margin-left: 46%;
+    margin-top: 5%;
+}
+
+.grid-item{
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 18px;
+}
+
+.read-btn{
+    border: none;
+    border-radius: 10px;
+    background-color: lightslategray;
+    width: 110px;
+    font-size: 14px;
+}
+
+#remove-btn{
+    margin-left: 90px;
+    border: none;
+    border-radius: 10px;
+    background-color: lightslategray;
+    width: 110px;
+    font-size: 14px;
+}
