@@ -1,3 +1,33 @@
+class myLibrary {
+  constructor() {
+    this.books = [];
+  }
+
+  addBook(book) {
+    this.books.push(book);
+  }
+
+  removeBook(book) {
+    this.books = this.books.filter((b) => b !== book);
+  }
+}
+
+const library = new myLibrary();
+library.addBook(new Book("White Nights", "F. Dostoyevsky", "50", true));
+
+class Book {
+  id = 0;
+  constructor(title, author, numPages, read) {
+    this.bookId = ++Book.id;
+    this.title = title;
+    this.author = author;
+    this.numPages = numPages;
+    this.read = read;
+  }
+}
+
+//---------------------------------------------------------------------------//
+
 const myLibrary = [];
 Book.id = 0;
 
