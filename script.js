@@ -1,60 +1,86 @@
-class myLibrary {
+class Library {
   constructor() {
-    this.books = [];
+    this.myLibrary = [];
   }
 
-  addBook(book) {
-    this.books.push(book);
+  addBookToLibrary(book) {
+    this.myLibrary.push(book);
   }
 
-  removeBook(book) {
-    this.books = this.books.filter((b) => b !== book);
+  removeBook(bookId) {
+    const findBook = this.myLibrary.findIndex(
+      (element) => element.bookId === bookId
+    );
+    this.myLibrary.splice(findBook, 1);
+  }
+
+  toggleReadStatus(bookId) {
+    const findBook = this.myLibrary.find(
+      (element) => element.bookId === bookId
+    );
+    findBook.Read = !findBook.Read;
+  }
+
+  showBooks() {
+    const gridContainer = document.querySelector("#grid-container");
+    gridContainer.textContent = "";
+    this.myLibrary.forEach((element) => {
+      let gridItem = document.createElement("div");
+      gridItem.setAttribute("class", `grid-item ${element.bookId}`);
+      gridContainer.appendChild(gridItem);
+
+      for (let key in element) {
+        if (key !== "BookId") {
+          const propText = document.createElement("p");
+          propText.textContent = `${key}: ${element[key]}`;
+          gridItem.appendChild(propText);
+        }
+      }
+
+      const readBtn = document.createElement("button");
+      readBtn.classList.add("read-btn");
+      gridItem.appendChild(readBtn);
+      if (element.Read === true) {
+        readBtn.textContent = "Not Read";
+      } else if (element.Read === false) {
+        readBtn.textContent = "Read";
+      }
+
+      readBtn.addEventListener("click", () => {
+        this.toggleReadStatus(element.bookId);
+        this.showBooks();
+      });
+
+      const remBtn = document.createElement("button");
+      gridItem.appendChild(remBtn);
+      remBtn.setAttribute("id", "remove-btn");
+      remBtn.textContent = "Remove Book";
+      remBtn.onclick = () => {
+        this.removeBook(element.bookId);
+        this.showBooks();
+      };
+    });
   }
 }
-
-const library = new myLibrary();
-library.addBook(new Book("White Nights", "F. Dostoyevsky", "50", true));
 
 class Book {
-  id = 0;
+  static id = 0;
   constructor(title, author, numPages, read) {
-    this.bookId = ++Book.id;
-    this.title = title;
-    this.author = author;
-    this.numPages = numPages;
-    this.read = read;
+    this.BookId = `${++Book.id}`;
+    this.Title = title;
+    this.Author = author;
+    this.NumPages = numPages;
+    this.Read = read;
   }
 }
 
-//---------------------------------------------------------------------------//
+const myLibrary = new Library();
+const book1 = new Book("White Nights", "F. Dostoyevsky", "50", true);
 
-const myLibrary = [];
-Book.id = 0;
-
-function Book(title, author, numPages, read) {
-  this.bookId = `${++Book.id}`;
-  this.title = title;
-  this.author = author;
-  this.numPages = numPages;
-  this.read = read;
-}
+myLibrary.addBookToLibrary(book1);
+myLibrary.showBooks();
 
 const newBookDialog = document.querySelector("#new-book-dialog");
-
-function addBookToLibrary() {
-  let newBookTitleInput = document.querySelector("#form-title").value;
-  let newBookAuthorInput = document.querySelector("#form-author").value;
-  let newBookNumPagesInput = document.querySelector("#form-num-pages").value;
-  let newBookReadInput = document.querySelector("#form-is-read").checked;
-  myLibrary.push(
-    new Book(
-      newBookTitleInput,
-      newBookAuthorInput,
-      newBookNumPagesInput,
-      newBookReadInput
-    )
-  );
-}
 
 const showAddBookDialog = document.querySelector("#show-add-book-dialog-btn");
 showAddBookDialog.addEventListener("click", () => {
@@ -64,65 +90,19 @@ showAddBookDialog.addEventListener("click", () => {
 const submitForm = document.querySelector("#book-form");
 submitForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  addBookToLibrary();
+  let newBookTitleInput = document.querySelector("#form-title").value;
+  let newBookAuthorInput = document.querySelector("#form-author").value;
+  let newBookNumPagesInput = document.querySelector("#form-num-pages").value;
+  let newBookReadInput = document.querySelector("#form-is-read").checked;
+  myLibrary.addBookToLibrary(
+    new Book(
+      newBookTitleInput,
+      newBookAuthorInput,
+      newBookNumPagesInput,
+      newBookReadInput
+    )
+  );
   newBookDialog.close();
   submitForm.reset();
-  showBooks();
+  myLibrary.showBooks();
 });
-
-function showBooks() {
-  const gridContainer = document.querySelector("#grid-container");
-  gridContainer.textContent = "";
-  myLibrary.forEach((element) => {
-    let gridItem = document.createElement("div");
-    gridItem.setAttribute("class", `grid-item ${myLibrary.bookId}`);
-    gridContainer.appendChild(gridItem);
-
-    for (key in element) {
-      if (key !== "bookId") {
-        const propText = document.createElement("p");
-        propText.textContent = `${key}: ${element[key]}`;
-        gridItem.appendChild(propText);
-      }
-    }
-
-    const readBtn = document.createElement("button");
-    readBtn.classList.add("read-btn");
-    gridItem.appendChild(readBtn);
-    if (element.read === true) {
-      readBtn.textContent = "Not Read";
-    } else if (element.read === false) {
-      readBtn.textContent = "Read";
-    }
-
-    readBtn.addEventListener("click", () => {
-      if (element.read === true) {
-        readBtn.textContent = "Read";
-        element.read = false;
-      } else if (element.read === false) {
-        readBtn.textContent = "Not Read";
-        element.read = true;
-        readProp.textContent = `${key}: ${element.read}`;
-      }
-    });
-
-    const remBtn = document.createElement("button");
-    gridItem.appendChild(remBtn);
-    remBtn.setAttribute("id", "remove-btn");
-    remBtn.textContent = "Remove Book";
-    remBtn.onclick = remBook;
-  });
-}
-
-function remBook() {
-  const bookId = this.parentElement.classList[1];
-  const findBook = myLibrary.findIndex((element) => element.bookId === bookId);
-  myLibrary.splice(findBook, 1);
-  this.parentElement.remove();
-}
-
-const book = new Book("White Nights", "F. Dostoyevsky", "50", true);
-const book2 = new Book("Washington", "Ron Chernow", "500", false);
-myLibrary.push(book);
-myLibrary.push(book2);
-showBooks();

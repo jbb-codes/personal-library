@@ -1,6 +1,6 @@
 body{
     margin: 0;
-    /* background-color: lightslategray; */
+    background-color: rgb(70, 70, 70);
 }
 
 #grid-container{
@@ -34,11 +34,12 @@ body{
     border-radius: 10px;
     background-color: lightslategray;
     width: 110px;
+    height: 1.4rem;
     font-size: 14px;
 }
 
 #remove-btn{
-    margin-left: 90px;
+    margin-left: 95px;
     border: none;
     border-radius: 10px;
     background-color: lightslategray;
